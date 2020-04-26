@@ -27,7 +27,7 @@ const NavMenu = () => {
             ) : (
             <ul className="navbar-nav flex-grow">
             <NavItem>
-              <button className="btn btn-sucess" onClick={() => loginWithRedirect()}>Log in</button>
+              <button className="btn btn-success" onClick={() => loginWithRedirect()}>Log in</button>
             </NavItem>
             </ul>
           )}
