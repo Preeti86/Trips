@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {getAllTrips} from '../../actions/tripActions';
+
 export class Trips extends Component
 {
     constructor(props){
@@ -17,7 +20,13 @@ export class Trips extends Component
     }
 
     componentDidMount(){
-        this.populateTripsData();
+        this.props.getAllTrips();
+    }
+
+    componentDidUpdate(prevProps){
+        if(prevProps.trips.data != this.props.trips.data){
+            this.setState({trips: this.props.trips.data});
+        }
     }
 
     onTripUpdate(id){
@@ -28,15 +37,6 @@ export class Trips extends Component
     onTripDelete(id){
         const {history} = this.props;
         history.push('/delete/'+id);
-    }
-
-    populateTripsData(){
-        axios.get("api/Trips/GetTrips").then(result => {
-            const response = result.data;
-            this.setState({trips: response, loading: false, failed: false, error:""});
-        }).catch(error => {
-            this.setState({trips: [], loading: false, failed: true, error:"Trips could not be loaded"});
-        });
     }
 
     renderAllTripsTable(trips){
@@ -80,18 +80,27 @@ export class Trips extends Component
 
     render(){
 
-        let content = this.state.loading ? (
+        // let content = this.state.loading ? (
+        //     <p>
+        //         <em>Loading...</em>
+        //     </p>
+        // ) : ( this.state.failed ? (
+        //     <div className="text-danger">
+        //         <em>{this.state.error}</em>
+        //     </div>
+        // ) : (
+        //     this.renderAllTripsTable(this.state.trips))
+        // )
+        let content = this.props.trips.loading ? 
+        (
             <p>
-                <em>Loading...</em>
+                 <em>Loading...</em>
             </p>
-        ) : ( this.state.failed ? (
-            <div className="text-danger">
-                <em>{this.state.error}</em>
-            </div>
         ) : (
-            this.renderAllTripsTable(this.state.trips))
-        )
+            this.state.trips.length && this.renderAllTripsTable(this.state.trips)
+        );
 
+        
         return (
             <div>
                 <h1>All trips</h1>
@@ -101,3 +110,9 @@ export class Trips extends Component
         );
     }
 }
+
+const mapStateToProps = ({trips}) => ({
+    trips
+});
+
+export default connect(mapStateToProps, {getAllTrips})(Trips);
