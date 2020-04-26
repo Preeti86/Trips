@@ -3,10 +3,12 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 
-import './custom.css'
-import { Trips } from './components/Trip/Trip'
-import { Create } from './components/Trip/Create'
-import { Update } from './components/Trip/Update'
+import './custom.css';
+import { Trips } from './components/Trip/Trip';
+import { Create } from './components/Trip/Create';
+import { Update } from './components/Trip/Update';
+import { Delete } from './components/Trip/Delete';
+
 
 
 export default class App extends Component {
@@ -19,6 +21,7 @@ export default class App extends Component {
         <Route exact path='/create' component={Create} />
         <Route path='/trips' component={Trips}/>
         <Route path='/update/:id' component={Update}/>
+        <Route path='/Delete/:id' component={Delete}/>
       </Layout>
     );
   }
